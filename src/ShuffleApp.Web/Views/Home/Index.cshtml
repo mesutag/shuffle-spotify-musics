@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "shuffle your favorite artists' best songs.";
+}
+@model IndexViewModel
+
+<div class="text-center">
+    <form asp-action="Play">
+        <div style="margin-top:70px!important;">
+
+            @if (Model != null)
+            {
+                if (Model.Devices?.Count > 0)
+                {
+                    <input type="hidden" id="selectedDevice" name="selectedDevice" value="@Model.SelectedDeviceId" />
+                    <span>play on that device:</span><br />
+                    foreach (var item in Model.Devices.Select((result, index) => new { index, result.Id, result.IsActive, result.Name }))
+                    {
+                        <button type="button" class="device-item btn @(@Model.SelectedDeviceId==item.Id?"btn-dark":"btn-light") mt-lg-1" data-device-id="@item.Id">
+                            @item.Name.ToLower()
+                            @if (Model.SelectedDeviceId == item.Id)
+                            {
+                                <span class="badge badge-light">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-award-fill" viewBox="0 0 16 16">
+                                        <path d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68L6.331.864 8 0z" />
+                                        <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
+                                    </svg>
+                                </span>
+                            }
+                        </button>
+
+                    }
+                }
+                else
+                {
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button type="button" class="btn btn-link mt-lg-1" onclick="openWebApp();">
+                            ok! first, open your spotify app
+
+                            <span class="badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
+                                    <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                                </svg>
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        @*<a class="btn btn-link mt-lg-1" asp-action="Login" asp-controller="Account">
+                            ok! connect with spotity
+
+                            <span class="badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
+                                    <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                                </svg>
+                            </span>
+                        </a>*@
+                    }
+                }
+            }
+        </div>
+        <div class="form-group mt-lg-5">
+
+            <input type="text" class="form-control" id="searchquery" name="searchquery" aria-describedby="searchquery" value="@Model.SearchQuery" placeholder="type your liked artists and let's shuffle">
+            <button type="submit" class="btn btn-dark mt-lg-1">
+                play in spotify
+                <span class="badge badge-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                    </svg>
+                </span>
+            </button>
+
+        </div>
+
+    </form>
+    <div>
+        @if (Model != null)
+        {
+            if (Model.RelatedArtistsBySearchedArtist?.Count > 0)
+            {
+                foreach (var item in Model.RelatedArtistsBySearchedArtist)
+                {
+                    <button type="button" class="artist-item btn btn-light mt-lg-1">@item.Name.ToLower()</button>
+                }
+            }
+        }
+    </div>
+    <div>
+        @if (Model != null)
+        {
+            if (Model.TopArtist?.Count > 0 && Model.RelatedArtistsBySearchedArtist == null)
+            {
+                foreach (var item in Model.TopArtist)
+                {
+                    <button type="button" class="artist-item btn btn-light mt-lg-1">@item.Name.ToLower()</button>
+                }
+            }
+        }
+    </div>
+</div>
