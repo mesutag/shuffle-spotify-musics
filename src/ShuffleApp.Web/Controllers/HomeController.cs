@@ -62,19 +62,19 @@ namespace WebApplication6.Controllers
 
             if (string.IsNullOrEmpty(searchquery))
             {
-                model.SearchQuery = string.Join(", ", topArtist.Items.Take(5).Select(p => p.Name.ToLower()));
+                searchquery = string.Join(", ", topArtist.Items.Take(5).Select(p => p.Name.ToLower()));
 
-                return View("Index", model);
+                //return View("Index", model);
             }
             model.SearchQuery = searchquery;
 
 
 
-            string[] artists = searchquery.Split(",");
+            string[] artists = searchquery.Split(",", System.StringSplitOptions.TrimEntries);
 
             List<FullArtist> fullArtists = new List<FullArtist>();
             List<FullArtist> relatedFullArtists = new List<FullArtist>();
-            foreach (var item in artists)
+            foreach (var item in artists.Where(p => !string.IsNullOrEmpty(p)))
             {
                 var artist = _spotify.SearchItems(item, Spotify.API.NetCore.Enums.SearchType.Artist, limit: 1).Artists.Items.FirstOrDefault();
                 fullArtists.Add(artist);
@@ -142,6 +142,8 @@ namespace WebApplication6.Controllers
                 Name = p.Name.ToLower()
             }).ToList();
 
+
+            model.SearchQuery = string.Join(", ", topArtist.Items.Take(5).Select(p => p.Name.ToLower()));
 
             var devices = _spotify.GetDevices();
 

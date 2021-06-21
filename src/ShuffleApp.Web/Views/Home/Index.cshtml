@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "shuffle your favorite artists' best songs.";
+    ViewData["Title"] = "shuffle top musics from your favorite artists.";
 }
 @model IndexViewModel
 
@@ -30,51 +30,53 @@
 
                     }
                 }
-                else
-                {
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <button type="button" class="btn btn-link mt-lg-1" onclick="openWebApp();">
-                            ok! first, open your spotify app
-
-                            <span class="badge">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
-                                    <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                                </svg>
-                            </span>
-                        </button>
-                    }
-                    else
-                    {
-                        @*<a class="btn btn-link mt-lg-1" asp-action="Login" asp-controller="Account">
-                            ok! connect with spotity
-
-                            <span class="badge">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
-                                    <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                    <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                                </svg>
-                            </span>
-                        </a>*@
-                    }
-                }
             }
         </div>
-        <div class="form-group mt-lg-5">
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (Model != null && Model.Devices?.Count > 0)
+            {
+                <div class="form-group mt-lg-5">
+                    <input type="text" class="form-control" id="searchquery" name="searchquery" aria-describedby="searchquery" value="@Model.SearchQuery" placeholder="type your favorite artists and let's shuffle">
+                    <button type="submit" class="btn btn-dark mt-lg-1">
+                        play in spotify
+                        <span class="badge badge-light">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                            </svg>
+                        </span>
+                    </button>
 
-            <input type="text" class="form-control" id="searchquery" name="searchquery" aria-describedby="searchquery" value="@Model.SearchQuery" placeholder="type your liked artists and let's shuffle">
-            <button type="submit" class="btn btn-dark mt-lg-1">
-                play in spotify
-                <span class="badge badge-light">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-link mt-lg-1 h1" style="font-size: 2.5rem!important;" asp-action="Login" asp-controller="Account" onclick="openWebApp();return false;">
+                    ok! first, open your spotify app
+
+                    <span class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
+                            <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                        </svg>
+                    </span>
+                </a>
+            }
+
+        }
+        else
+        {
+            <a class="btn btn-link mt-lg-1 h1" style="font-size: 2.5rem!important;" asp-action="Login" asp-controller="Account">
+                connect with spotity
+
+                <span class="badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
+                        <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                     </svg>
                 </span>
-            </button>
-
-        </div>
-
+            </a>
+        }
     </form>
     <div>
         @if (Model != null)

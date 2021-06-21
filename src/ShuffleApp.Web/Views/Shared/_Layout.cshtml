@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - shuffle your favorite artists' best songs</title>
+    <title>shuffle top musics from your favorite artists</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet" />
+    <link href="~/lib/tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -17,45 +19,33 @@
                         <div class="col-sm">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <h6 class="h6" title="Manage">hello @User.Identity.Name.Split(" ")[0].ToLower()!</h6>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                <h6 class="h6" title="Manage">hello @User.Identity.Name.Split(" ")[0].ToLower()!</h6>
 
-                                </a>
+                            </a>
                             }
                             else
                             {
-                                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <h1 class="h6">shuffle your favorite artists' best songs.</h1>
-                                </a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                <h1 class="h6">shuffle top musics from your favorite artists.</h1>
+                            </a>
                             }
 
                         </div>
                         <div class="col-sm text-center">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <h1 class="h6">shuffle your favorite artists' best songs.</h1>
-                                </a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                <h1 class="h6">shuffle top musics from your favorite artists.</h1>
+                            </a>
                             }
                         </div>
                         <div class="col-sm text-right">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a class="nav-link text-dark" asp-action="Logout" asp-controller="Account">logout</a>
+                            <a class="nav-link text-dark" asp-action="Logout" asp-controller="Account">logout</a>
                             }
-                            else
-                            {
-                                <a class="btn btn-link mt-lg-1" asp-action="Login" asp-controller="Account">
-                                    ok! connect with spotity
 
-                                    <span class="badge">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-player-fill" viewBox="0 0 16 16">
-                                            <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm1 2h6a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm3 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                                        </svg>
-                                    </span>
-                                </a>
-                            }
                         </div>
                     </div>
                 </div>
@@ -70,11 +60,13 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Shuffle Multiple Artists On Spotify
+            &copy; 2021 - shuffle top musics from your favorite artists.
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/tokenfield/docs-assets/js/typeahead.bundle.js"></script>
+    <script src="~/lib/tokenfield/dist/bootstrap-tokenfield.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
