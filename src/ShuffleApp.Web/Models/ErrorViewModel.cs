@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApplication6.Models
+namespace ShuffleApp.Web.Models
 {
     public class ErrorViewModel
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace WebApplication6.Controllers
+namespace ShuffleApp.Web.Controllers
 {
     public class AccountController : Controller
     {

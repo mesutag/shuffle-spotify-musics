@@ -16,7 +16,7 @@
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
       }
     },
-    "WebApplication6": {
+    "ShuffleApp.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

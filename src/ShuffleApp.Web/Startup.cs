@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShuffleApp.Spotify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication6
+namespace ShuffleApp.Web
 {
     public class Startup
     {
@@ -25,40 +26,41 @@ namespace WebApplication6
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddScoped<IMusicService, SpotifyHandler>();
             services
-       .AddAuthentication(o =>
-       {
-           o.DefaultScheme = "Application";
-           o.DefaultSignInScheme = "External";
-       })
-       .AddCookie("Application")
-       .AddCookie("External")
-      .AddSpotify(options =>
-      {
-          options.ClientId = "9c2b1495bef94287a41476d1a1a44ea2";
-          options.ClientSecret = "d0f67e70b01d483787dbf8fa3c8c11b7";
-          //options.CallbackPath = "/Account/LoginCallback";
+                .AddAuthentication(o =>
+                {
+                   o.DefaultScheme = "Application";
+                   o.DefaultSignInScheme = "External";
+                })
+                .AddCookie("Application")
+                .AddCookie("External")
+                .AddSpotify(options =>
+                {
+                    options.ClientId = Configuration.GetValue<string>("SpotifyClientId");
+                    options.ClientSecret = Configuration.GetValue<string>("SpotifyClientSecret");
 
-          options.Scope.Add("user-modify-playback-state");
-          options.Scope.Add("user-read-playback-state");
-          options.Scope.Add("user-top-read");
-          options.Scope.Add("user-read-private");
-          options.SaveTokens = true;
-          options.Events.OnCreatingTicket = ctx =>
-          {
-              List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
+                    options.Scope.Add("user-modify-playback-state");
+                    options.Scope.Add("user-read-playback-state");
+                    options.Scope.Add("user-top-read");
+                    options.Scope.Add("user-read-private");
+                    options.SaveTokens = true;
+                    options.Events.OnCreatingTicket = ctx =>
+                    {
+                        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
 
-              tokens.Add(new AuthenticationToken()
-              {
-                  Name = "TicketCreated",
-                  Value = DateTime.UtcNow.ToString()
-              });
+                        tokens.Add(new AuthenticationToken()
+                        {
+                            Name = "TicketCreated",
+                            Value = DateTime.UtcNow.ToString()
+                        });
 
-              ctx.Properties.StoreTokens(tokens);
-              return Task.CompletedTask;
-          };
+                        ctx.Properties.StoreTokens(tokens);
+                        return Task.CompletedTask;
+                    };
 
-      });
+                });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Unspecified;

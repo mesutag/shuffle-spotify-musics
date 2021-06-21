@@ -34,6 +34,7 @@ function fix() {
     });
     searchQueries = d;
 }
+
 $(document).ready(function () {
     check();
     $("#searchquery").on("keyup", function (e) {
@@ -54,7 +55,7 @@ $(document).ready(function () {
             "<path d=\"M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z\" />" +
             "</svg></span>");
     });
-   
+
 });
 function select(item) {
     var val = $(item).text().trim();
@@ -103,7 +104,16 @@ function select(item) {
 
 
 function openWebApp() {
-    window.open('https://open.spotify.com/', '_blank');
+    window.location.href = "spotify:"
     setInterval(function () { window.location.reload(); }, 4000);
     return false;
+}
+
+
+function IsMobile() {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+    } else {
+        return false;
+    }
 }
