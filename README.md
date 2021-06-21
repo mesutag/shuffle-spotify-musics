@@ -1,4 +1,8 @@
-# ShuffleApp
+# Shuffle Spotify Musics
 
 
-https://github.com/mesutag/ShuffleApp
+shuffle top musics from favorite artists.
+
+# Demo
+
+http://musicium.com/
