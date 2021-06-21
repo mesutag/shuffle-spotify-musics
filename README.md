@@ -1,4 +1,5 @@
 # ShuffleApp
 
 
-https://github.com/mesutag/ShuffleApp
+shuffle top musics from favorite artists.
+
