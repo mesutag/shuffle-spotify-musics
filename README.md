@@ -1,7 +1,6 @@
 # Shuffle Spotify Musics
 
-
-shuffle top musics from favorite artists.
+shuffle and play top musics from multiple artists.
 
 # Demo
 
