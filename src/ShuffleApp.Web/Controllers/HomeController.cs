@@ -21,65 +21,14 @@ namespace ShuffleApp.Web.Controllers
             _logger = logger;
             _musicService = musicService;
         }
-        public async Task<IActionResult> Index(IndexViewModel viewModel)
-        {
-            if (viewModel.TopArtist != null)
-            {
-                return View(viewModel);
-            }
-            IndexViewModel model = new();
-            if (!User.Identity.IsAuthenticated)
-            {
-                return View("Index", model);
-            }
-
-            string accessToken = await HttpContext.GetTokenAsync("Spotify", "access_token");
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                return Redirect("~/Account/Logout");
-            }
-            _musicService.Init(accessToken);
-
-            UserProfile user = new();
-            try
-            {
-                await _musicService.GetUserProfile();
-            }
-            catch (System.Exception)
-            {
-                return Redirect("~/Account/Logout");
-            }
-
-
-            IEnumerable<Artist> topArtist = await _musicService.GetTopArtistForCurrentUser();
-            model.TopArtist = topArtist.Select(p => new ArtistModel
-            {
-                Name = p.Name.ToLower()
-            }).ToList();
-
-
-            model.SearchQuery = string.Join(", ", topArtist.Take(5).Select(p => p.Name.ToLower()));
-
-            IEnumerable<Device> devices = await _musicService.GetActiveDeviceForCurrentUser();
-            model.Devices = devices.Select(p => new DeviceModel
-            {
-                Name = p.DeviceName.ToLower(),
-                IsActive = p.IsActive,
-                Id = p.DeviceId
-            }).ToList();
-
-            if (model.Devices?.Count > 0)
-            {
-                model.SelectedDeviceId = model.Devices[0].Id;
-            }
-
-            return View("Index", model);
-        }
-        public async Task<ActionResult> Play(string searchquery, string selectedDevice)
+        public async Task<ActionResult> Index(string searchquery, string selectedDevice)
         {
             IndexViewModel model = new();
-            string deviceId = selectedDevice;
             model.SelectedDeviceId = selectedDevice;
+            model.SearchQuery = searchquery;
+
+
+
             if (!User.Identity.IsAuthenticated)
             {
                 return View("Index", model);
@@ -112,17 +61,22 @@ namespace ShuffleApp.Web.Controllers
                 IsActive = p.IsActive,
                 Id = p.DeviceId
             }).ToList();
-
-            if (string.IsNullOrEmpty(searchquery))
+            if (string.IsNullOrEmpty(model.SelectedDeviceId))
             {
-                searchquery = string.Join(", ", topArtist.Take(5).Select(p => p.Name.ToLower()));
-
+                if (model.Devices?.Count > 0)
+                {
+                    model.SelectedDeviceId = model.Devices[0].Id;
+                }
             }
-            model.SearchQuery = searchquery;
+            if (string.IsNullOrEmpty(model.SearchQuery))
+            {
+                model.SearchQuery = string.Join(", ", topArtist.Take(5).Select(p => p.Name.ToLower()));
+                return View(model);
+            }
 
 
 
-            string[] artistQueryKeys = searchquery.Split(",", System.StringSplitOptions.TrimEntries);
+            string[] artistQueryKeys = model.SearchQuery.Split(",", System.StringSplitOptions.TrimEntries);
 
             List<Artist> searhedArtists = new();
             List<Artist> relatedArtists = new();
@@ -150,7 +104,10 @@ namespace ShuffleApp.Web.Controllers
             var trackUris = tracks.OrderByDescending(p => p.Popularity)
                                     .Select(p => p.ToUri())
                                     .ToList();
-            await _musicService.Play(trackUris, deviceId);
+
+
+           
+            await _musicService.Play(trackUris, model.SelectedDeviceId);
 
 
 
